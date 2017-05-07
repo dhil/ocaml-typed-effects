@@ -87,7 +87,7 @@ module Pat:
     val exception_: ?loc:loc -> ?attrs:attrs -> pattern -> pattern
     val effect_:
       ?loc:loc -> ?attrs:attrs ->
-      lid -> pattern option -> pattern option -> pattern
+      label -> pattern list -> pattern option -> pattern
     val extension: ?loc:loc -> ?attrs:attrs -> extension -> pattern
   end
 
@@ -135,7 +135,7 @@ module Exp:
     val send: ?loc:loc -> ?attrs:attrs -> expression -> string -> expression
     val new_: ?loc:loc -> ?attrs:attrs -> lid -> expression
     val perform_:
-      ?loc:loc -> ?attrs:attrs -> lid -> expression option -> expression
+      ?loc:loc -> ?attrs:attrs -> label -> expression list -> expression
     val setinstvar: ?loc:loc -> ?attrs:attrs -> str -> expression -> expression
     val override: ?loc:loc -> ?attrs:attrs -> (str * expression) list
                   -> expression
@@ -195,27 +195,6 @@ module Te:
 
   end
 
-(** Effect declarations *)
-module Eff:
-  sig
-    val infos: ?loc:loc -> ?attrs:attrs -> ?docs:docs -> ?text:text ->
-      ?kind:effect_kind -> ?manifest:lid -> 'a -> str -> 'a effect_infos
-
-    val decl: ?loc:loc -> ?attrs:attrs -> ?docs:docs -> ?text:text ->
-      ?kind:effect_kind -> ?manifest:lid -> ?handler:effect_handler -> str ->
-      effect_declaration
-
-    val desc: ?loc:loc -> ?attrs:attrs -> ?docs:docs -> ?text:text ->
-      ?kind:effect_kind -> ?manifest:lid -> ?handler:bool -> str ->
-      effect_description
-
-    val constructor: ?loc:loc -> ?attrs:attrs -> ?info:info ->
-      ?args:constructor_arguments -> ?res:core_type -> str ->
-      effect_constructor
-
-    val handler: ?loc:loc -> case list -> effect_handler
-  end
-
 (** {2 Module language} *)
 
 (** Module type expressions *)
@@ -259,7 +238,6 @@ module Sig:
     val type_: ?loc:loc -> rec_flag -> type_declaration list -> signature_item
     val type_extension: ?loc:loc -> type_extension -> signature_item
     val exception_: ?loc:loc -> extension_constructor -> signature_item
-    val effect_: ?loc:loc -> effect_description -> signature_item
     val module_: ?loc:loc -> module_declaration -> signature_item
     val rec_module: ?loc:loc -> module_declaration list -> signature_item
     val modtype: ?loc:loc -> module_type_declaration -> signature_item
@@ -283,7 +261,6 @@ module Str:
     val type_: ?loc:loc -> rec_flag -> type_declaration list -> structure_item
     val type_extension: ?loc:loc -> type_extension -> structure_item
     val exception_: ?loc:loc -> extension_constructor -> structure_item
-    val effect_: ?loc:loc -> effect_declaration -> structure_item
     val module_: ?loc:loc -> module_binding -> structure_item
     val rec_module: ?loc:loc -> module_binding list -> structure_item
     val modtype: ?loc:loc -> module_type_declaration -> structure_item
